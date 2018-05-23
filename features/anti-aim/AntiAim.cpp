@@ -255,6 +255,16 @@ void CAntiAim::do_antiaim( sdk::CUserCmd* cmd ) {
 
 	Vector edge_angle = angle;
 	bool edging_head = Vars::options.aa_autodir && GetBestHeadAngle( edge_angle );
+	
+	if (Vars::options.Freestanding == 1 && local_player->GetVelocity().Length() <= 100.f && *local_player->GetFlags() & FL_ONGROUND)
+	{
+		cmd->viewangles.x = 89.000000; // down
+		BreakLowerbodyFreestand();
+
+		if (GLOBAL::should_send_packet)
+			float temp = cmd->viewangles.y;
+			temp -= 180.f;
+		}
 
 	if ( Vars::options.aa_bool ) {
 		antiaimyaw( cmd );
