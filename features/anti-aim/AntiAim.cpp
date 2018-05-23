@@ -171,11 +171,10 @@ bool CAntiAim::GetBestHeadAngle( Vector& angle ) {
 	return closest_distance < Vars::options.edge_distance;
 }
 
-void BreakLowerbodyFreestand()
+void CAntiAim::BreakLowerbodyFreestand( sdk::CUserCmd* cmd )
 {
 	auto local_player = ctx::client_ent_list->GetClientEntity( ctx::engine->GetLocalPlayer() );
 	Vector vEyePos = local_player->GetVecOrigin( ) + local_player->GetViewOffset( );
-	sdk::CUserCmd* cmd;
 	QAngle Angles;
 	ctx::engine->GetViewAngles(Angles);
 	float BestHeadPosition = GetBestHeadAngle(Angles.y);
@@ -287,7 +286,7 @@ void CAntiAim::do_antiaim( sdk::CUserCmd* cmd ) {
 	if (Vars::options.aa_autodir && local_player->GetVelocity().Length() <= 100.f && *local_player->GetFlags() & FL_ONGROUND)
 	{
 		cmd->viewangles.x = 89.000000; // down
-		BreakLowerbodyFreestand();
+		BreakLowerbodyFreestand( cmd );
 
 		if (GLOBAL::should_send_packet)
 		{
