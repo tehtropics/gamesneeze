@@ -15,6 +15,12 @@ float randnum( float Min, float Max ) {
 	return ( ( float( rand( ) ) / float( RAND_MAX ) ) * ( Max - Min ) ) + Min;
 }
 
+float RandomFloat2(float min, float max)
+{
+	typedef float(*RandomFloat_t)(float, float);
+	return ((RandomFloat_t)GetProcAddress(GetModuleHandle("vstdlib.dll"), "RandomFloat"))(min, max);
+}
+
 float get_curtime( sdk::CUserCmd* ucmd ) {
 	auto local_player = ctx::client_ent_list->GetClientEntity( ctx::engine->GetLocalPlayer( ) );
 
@@ -165,6 +171,28 @@ bool CAntiAim::GetBestHeadAngle( Vector& angle ) {
 	return closest_distance < Vars::options.edge_distance;
 }
 
+void BreakLowerbodyFreestand()
+{
+	auto local_player = ctx::client_ent_list->GetClientEntity( ctx::engine->GetLocalPlayer() );
+	Vector vEyePos = local_player->GetVecOrigin( ) + local_player->GetViewOffset( );
+	sdk::CUserCmd* cmd;
+	QAngle Angles;
+	ctx::engine->GetViewAngles(Angles);
+	float BestHeadPosition = GetBestHeadAngle(Angles.y);
+
+	int LowerbodyDelta = Vars::options.delta_val;
+
+	if (GLOBAL::should_send_packet) {
+		cmd->viewangles.y = BestHeadPosition + LowerbodyDelta + RandomFloat2(-6.f, 6.f);
+	}
+	else {
+		if (next_lby_update( cmd->viewangles.y - lbydelta, cmd ))
+			cmd->viewangles.y = BestHeadPosition + LowerbodyDelta;
+		else
+			cmd->viewangles.y = BestHeadPosition;
+	}
+}
+
 void CAntiAim::antiaimyaw( sdk::CUserCmd* cmd ) {
 	auto local_player = ctx::client_ent_list->GetClientEntity( ctx::engine->GetLocalPlayer( ) );
 
@@ -256,15 +284,17 @@ void CAntiAim::do_antiaim( sdk::CUserCmd* cmd ) {
 	Vector edge_angle = angle;
 	bool edging_head = Vars::options.aa_autodir && GetBestHeadAngle( edge_angle );
 	
-	if (Vars::options.Freestanding == 1 && local_player->GetVelocity().Length() <= 100.f && *local_player->GetFlags() & FL_ONGROUND)
+	if (Vars::options.aa_autodir && local_player->GetVelocity().Length() <= 100.f && *local_player->GetFlags() & FL_ONGROUND)
 	{
 		cmd->viewangles.x = 89.000000; // down
 		BreakLowerbodyFreestand();
 
 		if (GLOBAL::should_send_packet)
+		{
 			float temp = cmd->viewangles.y;
-			temp -= 180.f;
+			temp -= 180.f;	
 		}
+	}
 
 	if ( Vars::options.aa_bool ) {
 		antiaimyaw( cmd );
