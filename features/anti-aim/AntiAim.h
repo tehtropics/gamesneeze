@@ -17,7 +17,7 @@ public:
 	void sidewaysf( sdk::CUserCmd * cmd );
 	void backjitterf( sdk::CUserCmd * cmd );
 	void lowerbodyf( sdk::CUserCmd * cmd );
-	void BreakLowerbodyFreestand();
+	void BreakLowerbodyFreestand( sdk::CUserCmd* cmd );
 private:
 	void backwards(sdk::CUserCmd* cmd);
 	void legit(sdk::CUserCmd* cmd);
