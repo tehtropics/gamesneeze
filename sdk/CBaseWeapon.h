@@ -221,12 +221,12 @@ namespace sdk
 		float GetSpreadCone()
 		{
 			typedef float(__thiscall* Fn)(void*);
-			return VMT::VMTHookManager::GetFunction<Fn>(this, 439)(this);
+			return VMT::VMTHookManager::GetFunction<Fn>(this, 437)(this); // was 439
 		}
 		float GetInaccuracy()
 		{
 			typedef float(__thiscall* Fn)(void*);
-			return VMT::VMTHookManager::GetFunction<Fn>(this, 470)(this); //469
+			return VMT::VMTHookManager::GetFunction<Fn>(this, 468)(this); // was 470
 		}
 		int GetLoadedAmmo() 
 		{
@@ -235,7 +235,7 @@ namespace sdk
 		void UpdateAccuracyPenalty()
 		{
 			typedef void(__thiscall* Fn)(void*);
-			return VMT::VMTHookManager::GetFunction<Fn>(this, 471)(this); //470
+			return VMT::VMTHookManager::GetFunction<Fn>(this, 469)(this); //was 471
 		}
 		CSWeaponInfo* get_full_info()
 		{
