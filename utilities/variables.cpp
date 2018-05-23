@@ -110,7 +110,7 @@ namespace Vars
 
 	bool CSettings::Save(std::string file_name)
 	{
-		std::string file_path = "C:\\gamesneeze\\" + file_name + ".cfg";
+		std::string file_path = "C:\\blurry.us\\" + file_name + ".cfg";
 
 		std::fstream file(file_path, std::ios::out | std::ios::in | std::ios::trunc);
 		file.close();
@@ -138,9 +138,9 @@ namespace Vars
 	}
 	bool CSettings::Load(std::string file_name)
 	{
-		CreateDirectory("C:\\gamesneeze\\", NULL);
+		CreateDirectory("C:\\blurry.us\\", NULL);
 
-		std::string file_path = "C:\\gamesneeze\\" + file_name + ".cfg";
+		std::string file_path = "C:\\blurry.us\\" + file_name + ".cfg";
 
 		std::fstream file;
 		file.open(file_path, std::ios::out | std::ios::in);
@@ -181,7 +181,7 @@ namespace Vars
 	}
 	void CSettings::CreateConfig()
 	{
-		std::string file_path = "C:\\gamesneeze\\BlankConfig.cfg";
+		std::string file_path = "C:\\blurry.us\\BlankConfig.cfg";
 
 		std::fstream file;
 		file.open(file_path, std::ios::out | std::ios::in | std::ios::trunc);
@@ -195,7 +195,7 @@ namespace Vars
 		std::vector<std::string> configs;
 
 		WIN32_FIND_DATA ffd;
-		auto directory = "C:\\gamesneeze\\*";
+		auto directory = "C:\\blurry.us\\*";
 		auto hFind = FindFirstFile(directory, &ffd);
 
 		while (FindNextFile(hFind, &ffd))
